@@ -1,103 +1,50 @@
-# MaliTrek 🌍
+# MaliTrek Prestige - Expéditions de Luxe au Mali
 
-## Tourism Web & Mobile Platform for Mali
+MaliTrek Prestige est une plateforme de réservation et de suivi d'expéditions de trekking haut de gamme au Mali.
 
-MaliTrek is a modern tourism platform connecting travelers with local guides across Mali through immersive cultural, historical and adventure experiences.
+## 🚀 Déploiement sur Firebase Hosting
 
-The platform allows users to:
-- Discover local destinations
-- Book guided trips
-- Chat with guides
-- Manage reservations
-- Explore interactive maps
-- Receive notifications
-- Experience authentic tourism in Mali
+Pour déployer cette application sur votre propre projet Firebase, suivez ces étapes :
 
----
+### 1. Prérequis
+- Un compte Firebase.
+- Node.js installé (LTS recommandé).
+- Firebase CLI installé (`npm install -g firebase-tools`).
 
-# 🚀 Features
+### 2. Initialisation
+Dans le répertoire racine du projet :
+```bash
+# Se connecter à Firebase
+firebase login
 
-## Traveler Features
-- User authentication
-- Explore tourist circuits
-- Search & filtering
-- Booking system
-- Favorites
-- Real-time messaging
-- Notifications
-- Profile management
+# Initialiser le projet (si ce n'est pas déjà fait)
+# Sélectionnez Hosting et choisissez votre projet Firebase existant
+firebase init hosting
+```
+*Note: Lors de l'initialisation, assurez-vous de choisir `dist` comme dossier public et répondez `Yes` à la question "Configure as a single-page app".*
 
-## Guide Features
-- Create tourism circuits
-- Manage trips
-- Publish departures
-- Chat with travelers
-- Booking management
-- Earnings workflow
+### 3. Build & Déploiement
+```bash
+# Installer les dépendances
+npm install
 
-## Admin Features
-- Validate circuits
-- Manage users
-- Moderate content
-- Platform administration
+# Construire l'application
+npm run build
 
----
+# Déployer sur Firebase
+firebase deploy
+```
 
-# 🛠️ Tech Stack
+## 📱 Installation PWA (Mode Application)
+L'application est configurée comme une **Progressive Web App (PWA)**. 
+- Sur **iPhone/Safari** : Appuyez sur le bouton "Partager" et choisissez "Sur l'écran d'accueil".
+- Sur **Android/Chrome** : Appuyez sur les trois points (menu) et choisissez "Installer l'application".
 
-## Frontend
-- React
-- TypeScript
-- Tailwind CSS
-- Framer Motion
+## 🛠 Variables d'environnement
+Créez un fichier `.env` basé sur `.env.example` pour configurer vos clés API Gemini si nécessaire.
 
-## Backend & Cloud
-- Firebase Authentication
-- Firestore Database
-- Firebase Storage
-
-## Maps & UI
-- React Leaflet
-- Lucide React
-
----
-
-# 📱 Project Vision
-
-MaliTrek aims to modernize tourism in Mali by creating a digital ecosystem connecting local communities and travelers through secure, authentic and immersive experiences.
-
----
-
-# 🔥 Main Objectives
-
-- Promote tourism in Mali
-- Support local guides
-- Digitalize tourism services
-- Improve traveler experience
-- Create accessible tourism solutions
-
----
-
-# 📸 Screenshots
-
-Coming soon...
-
----
-
-# 👨‍💻 Author
-
-## Amadou Diabate
-
-Full Stack Developer & Digital Product Builder
-
-- GitHub:
-  https://github.com/Amadou-lab
-
-- LinkedIn:
-  https://www.linkedin.com/in/amadou-diabate-bb50a31aa/
-
----
-
-# ⚡ Status
-
-Project currently under active development.
+## 🎨 Personnalisation des icônes
+Remplacez les fichiers suivants dans le dossier `public/` par vos propres logos pour personnaliser l'icône de l'application :
+- `favicon.png` (32x32)
+- `icon-192.png` (192x192)
+- `icon-512.png` (512x512)

@@ -1,0 +1,285 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user roles and financial balance.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["ROLE_ADMIN", "ROLE_GUIDE", "ROLE_CLIENT"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "balanceAvailable": { "type": "number" },
+        "balancePending": { "type": "number" },
+        "balanceBlocked": { "type": "number" },
+        "totalEarned": { "type": "number" },
+        "totalWithdrawn": { "type": "number" },
+        "paymentMethods": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      },
+      "required": ["uid", "displayName", "email", "role", "createdAt"]
+    },
+    "Circuit": {
+      "title": "Circuit",
+      "description": "A tourist circuit template.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "location": { "type": "string" },
+        "region": { "type": "string" },
+        "description": { "type": "string" },
+        "basePrice": { "type": "number" },
+        "duration": { "type": "string" },
+        "image": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "pending_admin_validation", "approved", "rejected", "disabled"] },
+        "guideId": { "type": "string" },
+        "category": { "type": "string" },
+        "itinerary": { "type": "array", "items": { "type": "object" } },
+        "inclus": { "type": "array", "items": { "type": "string" } },
+        "nonInclus": { "type": "array", "items": { "type": "string" } },
+        "minParticipants": { "type": "number" },
+        "maxParticipants": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "location", "region", "basePrice", "status", "guideId", "category", "minParticipants"]
+    },
+    "Journey": {
+      "title": "Journey",
+      "description": "A specific date for a circuit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "circuitId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "time": { "type": "string" },
+        "pricePerPerson": { "type": "number" },
+        "totalSeats": { "type": "number" },
+        "availableSeats": { "type": "number" },
+        "minParticipants": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "open", "full", "confirmed_by_guide", "in_progress", "completed", "cancelled"] },
+        "title": { "type": "string" },
+        "location": { "type": "string" }
+      },
+      "required": ["circuitId", "guideId", "date", "time", "pricePerPerson", "totalSeats", "availableSeats", "minParticipants", "status"]
+    },
+    "Reservation": {
+      "title": "Reservation",
+      "description": "A booking made by a client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "circuitId": { "type": "string" },
+        "userId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "passengers": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "guideShare": { "type": "number" },
+        "platformFee": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending_payment", "confirmed", "in_progress", "completed", "cancelled", "disputed"] },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "paid", "released", "refunded"] },
+        "fullname": { "type": "string" },
+        "phone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["journeyId", "circuitId", "userId", "guideId", "passengers", "totalPaid", "status", "paymentStatus"]
+    },
+    "ReservationEvent": {
+      "title": "Reservation Event",
+      "description": "Log of actions on a reservation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "type": { "type": "string" },
+        "userId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reservationId", "type", "userId", "timestamp"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Client feedback on a journey.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "circuitId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "ratingGlobal": { "type": "number" },
+        "ratingGuide": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial ledger for all marketplace movements.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "circuitId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { 
+          "type": "string", 
+          "enum": [
+            "client_payment", 
+            "payment_hold", 
+            "platform_fee", 
+            "guide_earning_pending", 
+            "guide_earning_release", 
+            "guide_withdrawal_request", 
+            "guide_withdrawal_paid", 
+            "refund_full", 
+            "refund_partial", 
+            "dispute_refund", 
+            "dispute_split", 
+            "cancellation_fee"
+          ] 
+        },
+        "status": { "type": "string", "enum": ["pending", "completed", "failed", "reversed"] },
+        "provider": { "type": "string", "enum": ["cinetpay", "paydunya", "orange_money", "moov_money", "wave", "bank_card", "manual_test"] },
+        "providerReference": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Withdrawal": {
+      "title": "Withdrawal",
+      "description": "Guide withdrawal request.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "guideId": { "type": "string" },
+        "guideName": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["orange_money", "moov_money", "wave", "bank_transfer"] },
+        "accountNumber": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "processed", "rejected"] },
+        "rejectionReason": { "type": "string" },
+        "processedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "note": { "type": "string" }
+      }
+    },
+    "Dispute": {
+      "title": "Dispute",
+      "description": "Dispute between client and guide.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "userId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "resolved", "rejected", "closed"] },
+        "adminDecision": { "type": "string" }
+      }
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "High-level administrative audit trails.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "actorId": { "type": "string" },
+        "action": { "type": "string" },
+        "targetType": { "type": "string" },
+        "targetId": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Chat thread between client and guide.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "lastMessageAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Incident": {
+      "title": "Incident",
+      "description": "Reported incident during a trek.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string" },
+        "details": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "investigating", "resolved", "closed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Cancellation": {
+      "title": "Cancellation",
+      "description": "Record of a reservation cancellation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reservationId": { "type": "string" },
+        "journeyId": { "type": "string" },
+        "clientId": { "type": "string" },
+        "guideId": { "type": "string" },
+        "requestedBy": { "type": "string" },
+        "reason": { "type": "string" },
+        "refundAmount": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Individual message in a conversation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "readBy": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "UserProfile", "description": "User profiles" },
+    "/circuits/{circuitId}": { "schema": "Circuit", "description": "Circuits" },
+    "/journeys/{journeyId}": { "schema": "Journey", "description": "Journeys" },
+    "/reservations/{reservationId}": { "schema": "Reservation", "description": "Reservations" },
+    "/reservationEvents/{eventId}": { "schema": "ReservationEvent", "description": "Logs" },
+    "/transactions/{transactionId}": { "schema": "Transaction", "description": "Ledger" },
+    "/disputes/{disputeId}": { "schema": "Dispute", "description": "Disputes" },
+    "/withdrawals/{withdrawalId}": { "schema": "Withdrawal", "description": "Withdrawal requests" },
+    "/auditLogs/{logId}": { "schema": "AuditLog", "description": "Audit trails" },
+    "/conversations/{conversationId}": { "schema": "Conversation", "description": "Chat threads" },
+    "/messages/{messageId}": { "schema": "Message", "description": "Chat messages" },
+    "/incidents/{incidentId}": { "schema": "Incident", "description": "Incidents" },
+    "/cancellations/{cancelId}": { "schema": "Cancellation", "description": "Cancellations" },
+    "/reviews/{reviewId}": { "schema": "Review", "description": "Client reviews of journeys" }
+  }
+}

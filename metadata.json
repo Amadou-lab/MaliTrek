@@ -1,0 +1,8 @@
+{
+  "name": "MaliTrek",
+  "description": "Plateforme de tourisme connectant guides, touristes et administrateurs pour explorer le Mali.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
